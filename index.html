@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ghana Basic Schools LMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Full-page background */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f4f6f8 url('assets/background.png') center/cover no-repeat;
+    }
+    header {
+      background: rgba(45,62,80,0.85);
+      color: #fff;
+      padding: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    header .logo {
+      height: 40px;
+      margin-right: 1rem;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: rgba(255,255,255,0.9);
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #ccc;
+    }
+    nav {
+      display: flex;
+      gap: .5rem;
+      margin-bottom: 1.5rem;
+    }
+    nav button {
+      padding: .5rem 1rem;
+      border: none;
+      background: #2d3e50;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    nav button.active {
+      background: #1abc9c;
+    }
+    nav button.hidden {
+      display: none;
+    }
+    .hidden {
+      display: none;
+    }
+    form {
+      margin-bottom: 1.5rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+    }
+    input, select {
+      width: 100%;
+      padding: .5rem;
+      margin-top: .5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: .5rem;
+      text-align: left;
+    }
+    th {
+      background: #f0f0f0;
+    }
+    .actions button {
+      margin-right: .5rem;
+      padding: .25rem .5rem;
+      border: none;
+      color: #fff;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .actions button.edit {
+      background: #f39c12;
+    }
+    .actions button.delete {
+      background: #e74c3c;
+    }
+    .auth-links {
+      margin-top: 1rem;
+    }
+    .auth-links a,
+    .back-login {
+      color: #2d3e50;
+      text-decoration: none;
+      margin-right: .5rem;
+    }
+    .auth-links a:hover,
+    .back-login:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="assets/logo.png" alt="LMS Logo" class="logo">
+    <h1>Ghana Basic Schools LMS</h1>
+  </header>
+
+  <main>
+    <nav>
+      <button id="nav-login" class="active">Login</button>
+      <button id="nav-admin" class="hidden">Admin</button>
+      <button id="nav-teacher" class="hidden">Teacher</button>
+      <button id="nav-student" class="hidden">Student</button>
+      <button id="nav-logout" class="hidden">Logout</button>
+    </nav>
+
+    <!-- LOGIN -->
+    <section id="login">
+      <form id="login-form">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required>
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" required>
+        <button type="submit">Sign In</button>
+      </form>
+      <div class="auth-links">
+        <a href="#" id="link-signup">Sign Up</a> |
+        <a href="#" id="link-forgot">Forgot Password</a>
+      </div>
+    </section>
+
+    <!-- SIGN UP -->
+    <section id="signup" class="hidden">
+      <h2>Create an Account</h2>
+      <form id="signup-form">
+        <label for="signup-email">Email</label>
+        <input type="email" id="signup-email" required>
+        <label for="signup-password">Password</label>
+        <input type="password" id="signup-password" required>
+        <label for="signup-confirm">Confirm Password</label>
+        <input type="password" id="signup-confirm" required>
+        <label for="signup-role">Role</label>
+        <select id="signup-role">
+          <option value="admin">Admin</option>
+          <option value="teacher">Teacher</option>
+          <option value="student">Student</option>
+        </select>
+        <button type="submit">Sign Up</button>
+      </form>
+      <a href="#" class="back-login" id="back-signup">Back to Login</a>
+    </section>
+
+    <!-- FORGOT PASSWORD -->
+    <section id="forgot" class="hidden">
+      <h2>Retrieve Password</h2>
+      <form id="forgot-form">
+        <label for="forgot-email">Email</label>
+        <input type="email" id="forgot-email" required>
+        <button type="submit">Get My Password</button>
+      </form>
+      <a href="#" class="back-login" id="back-forgot">Back to Login</a>
+    </section>
+
+    <!-- ADMIN -->
+    <section id="admin" class="hidden">
+      <h2>Enroll New Student</h2>
+      <form id="enroll-form">
+        <label for="student-name">Student Name</label>
+        <input type="text" id="student-name" required>
+        <label for="student-class">Class</label>
+        <select id="student-class">
+          <option>Nursery</option>
+          <option>Primary</option>
+          <option>JHS</option>
+        </select>
+        <button type="submit">Enroll</button>
+      </form>
+      <h3>Enrolled Students</h3>
+      <table id="students-table">
+        <thead><tr><th>Name</th><th>Class</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- TEACHER -->
+    <section id="teacher" class="hidden">
+      <h2>Record Student Scores</h2>
+      <form id="score-form">
+        <label for="score-student">Student</label>
+        <select id="score-student"></select>
+        <label for="score-subject">Subject</label>
+        <input type="text" id="score-subject" required>
+        <label for="score-value">Score</label>
+        <input type="number" id="score-value" min="0" max="100" required>
+        <button type="submit" id="score-submit">Add Score</button>
+      </form>
+      <h3>All Scores</h3>
+      <table id="scores-table">
+        <thead>
+          <tr><th>Student</th><th>Subject</th><th>Score</th><th>Actions</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- STUDENT -->
+    <section id="student" class="hidden">
+      <h2>View Scores</h2>
+      <label for="student-select">Select Student</label>
+      <select id="student-select"></select>
+      <h3>Scores</h3>
+      <table id="student-scores-table">
+        <thead><tr><th>Subject</th><th>Score</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script>
+    //--- UTILS FOR STORAGE ---
+    function getUsers() {
+      let users = JSON.parse(localStorage.getItem('lms_users') || 'null');
+      if (!users) {
+        users = [
+          { email:'admin@school.edu',   pass:'admin123',   role:'admin' },
+          { email:'teacher@school.edu', pass:'teach123',   role:'teacher' },
+          { email:'student@school.edu', pass:'stud123',    role:'student' }
+        ];
+        localStorage.setItem('lms_users', JSON.stringify(users));
+      }
+      return users;
+    }
+    function saveUsers(u){ localStorage.setItem('lms_users', JSON.stringify(u)); }
+    function getStudents(){ return JSON.parse(localStorage.getItem('lms_students') || '[]'); }
+    function saveStudents(s){ localStorage.setItem('lms_students', JSON.stringify(s)); }
+    function getScores(){ return JSON.parse(localStorage.getItem('lms_scores') || '[]'); }
+    function saveScores(s){ localStorage.setItem('lms_scores', JSON.stringify(s)); }
+
+    //--- ELEMENT REFS ---
+    const nav = {
+      login:   document.getElementById('nav-login'),
+      admin:   document.getElementById('nav-admin'),
+      teacher: document.getElementById('nav-teacher'),
+      student: document.getElementById('nav-student'),
+      logout:  document.getElementById('nav-logout')
+    };
+    const sec = {
+      login:  document.getElementById('login'),
+      signup: document.getElementById('signup'),
+      forgot: document.getElementById('forgot'),
+      admin:  document.getElementById('admin'),
+      teacher:document.getElementById('teacher'),
+      student:document.getElementById('student')
+    };
+    let currentRole = null, editingIndex = null;
+
+    //--- SHOW SECTION & NAV STATE ---
+    function show(key) {
+      Object.values(sec).forEach(s=>s.classList.add('hidden'));
+      sec[key].classList.remove('hidden');
+      Object.values(nav).forEach(b=>b.classList.remove('active'));
+      if(nav[key]) nav[key].classList.add('active');
+    }
+    function updateNav(role) {
+      Object.values(nav).forEach(b=>b.classList.add('hidden'));
+      nav.logout.classList.remove('hidden');
+      nav[role].classList.remove('hidden');
+      show(role);
+    }
+
+    //--- NAV HANDLERS ---
+    Object.entries(nav).forEach(([k,btn])=>{
+      btn.addEventListener('click',()=>{
+        if(k==='logout'){
+          localStorage.removeItem('lms_current');
+          location.reload();
+        } else show(k);
+      });
+    });
+
+    //--- AUTH LINK HANDLERS ---
+    document.getElementById('link-signup').onclick = e=>{e.preventDefault(); show('signup');};
+    document.getElementById('link-forgot').onclick = e=>{e.preventDefault(); show('forgot');};
+    document.getElementById('back-signup').onclick  = e=>{e.preventDefault(); show('login');};
+    document.getElementById('back-forgot').onclick  = e=>{e.preventDefault(); show('login');};
+
+    //--- LOGIN FLOW ---
+    document.getElementById('login-form').addEventListener('submit', e=>{
+      e.preventDefault();
+      const email = e.target['login-email'].value.trim();
+      const pass  = e.target['login-password'].value;
+      const user  = getUsers().find(u=>u.email===email&&u.pass===pass);
+      if(!user) return alert('Invalid credentials');
+      currentRole = user.role;
+      localStorage.setItem('lms_current', currentRole);
+      initApp();
+    });
+
+    //--- SIGN UP FLOW ---
+    document.getElementById('signup-form').addEventListener('submit', e=>{
+      e.preventDefault();
+      const email   = e.target['signup-email'].value.trim();
+      const pass    = e.target['signup-password'].value;
+      const confirm = e.target['signup-confirm'].value;
+      const role    = e.target['signup-role'].value;
+      if(pass!==confirm) return alert('Passwords do not match');
+      const users = getUsers();
+      if(users.some(u=>u.email===email)) return alert('Email already exists');
+      users.push({ email, pass, role });
+      saveUsers(users);
+      alert('Account created. Please log in.');
+      show('login');
+    });
+
+    //--- FORGOT PASSWORD FLOW ---
+    document.getElementById('forgot-form').addEventListener('submit', e=>{
+      e.preventDefault();
+      const email = e.target['forgot-email'].value.trim();
+      const user  = getUsers().find(u=>u.email===email);
+      if(!user) return alert('Email not found');
+      alert('Your password is: '+user.pass);
+      show('login');
+    });
+
+    //--- INITIALIZE APP AFTER LOGIN ---
+    function initApp(){
+      updateNav(currentRole);
+      renderStudents();
+      populateSelects();
+      renderScores();
+      renderStudentScores();
+    }
+    window.addEventListener('DOMContentLoaded', ()=>{
+      const saved = localStorage.getItem('lms_current');
+      if(saved){ currentRole = saved; initApp(); }
+      else show('login');
+    });
+
+    //--- ADMIN: ENROLL STUDENTS ---
+    document.getElementById('enroll-form').onsubmit = e=>{
+      e.preventDefault();
+      const name = e.target['student-name'].value.trim();
+      const cls  = e.target['student-class'].value;
+      if(!name) return alert('Please enter a name.');
+      const list = getStudents();
+      list.push({ name, cls });
+      saveStudents(list);
+      e.target.reset();
+      renderStudents();
+      populateSelects();
+    };
+    function renderStudents(){
+      document.querySelector('#students-table tbody').innerHTML =
+        getStudents().map(s=>`<tr><td>${s.name}</td><td>${s.cls}</td></tr>`).join('');
+    }
+
+    //--- TEACHER: RECORD & MANAGE SCORES ---
+    document.getElementById('score-form').onsubmit = e=>{
+      e.preventDefault();
+      const student = e.target['score-student'].value;
+      const subject = e.target['score-subject'].value.trim();
+      const score   = parseInt(e.target['score-value'].value,10);
+      if(!student||!subject||isNaN(score)) return alert('Complete all fields.');
+      const list = getScores();
+      if(editingIndex===null) list.push({ student, subject, score });
+      else { list[editingIndex]={ student, subject, score }; editingIndex=null; }
+      saveScores(list);
+      document.getElementById('score-submit').textContent = 'Add Score';
+      e.target.reset();
+      renderScores();
+      renderStudentScores();
+    };
+    function populateSelects(){
+      const opts = getStudents().map(s=>`<option>${s.name}</option>`).join('');
+      document.getElementById('score-student').innerHTML = opts;
+      document.getElementById('student-select').innerHTML   = opts;
+    }
+    function renderScores(){
+      const rows = getScores().map((sc,i)=>`
+        <tr>
+          <td>${sc.student}</td>
+          <td>${sc.subject}</td>
+          <td>${sc.score}</td>
+          <td class="actions">
+            <button class="edit"   data-i="${i}">Edit</button>
+            <button class="delete" data-i="${i}">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+      const tbody = document.querySelector('#scores-table tbody');
+      tbody.innerHTML = rows;
+      tbody.querySelectorAll('.edit').forEach(btn=>{
+        btn.onclick =()=>{
+          const i=+btn.dataset.i, sc=getScores()[i];
+          document.getElementById('score-student').value = sc.student;
+          document.getElementById('score-subject').value = sc.subject;
+          document.getElementById('score-value').value   = sc.score;
+          editingIndex = i;
+          document.getElementById('score-submit').textContent='Update Score';
+        };
+      });
+      tbody.querySelectorAll('.delete').forEach(btn=>{
+        btn.onclick=()=>{
+          const i=+btn.dataset.i; const list=getScores();
+          list.splice(i,1); saveScores(list);
+          renderScores(); renderStudentScores();
+        };
+      });
+    }
+
+    //--- STUDENT: VIEW SCORES ---
+    document.getElementById('student-select').onchange = renderStudentScores;
+    function renderStudentScores(){
+      const name = document.getElementById('student-select').value;
+      document.querySelector('#student-scores-table tbody').innerHTML =
+        getScores().filter(s=>s.student===name)
+                   .map(s=>`<tr><td>${s.subject}</td><td>${s.score}</td></tr>`)
+                   .join('');
+    }
+  </script>
+</body>
+</html>
+```
